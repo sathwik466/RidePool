@@ -1,0 +1,6 @@
+target/
+.env
+backend/src/main/resources/application.properties
+target/
+backend/src/main/resources/application.properties
+target/
