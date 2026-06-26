@@ -1,207 +1,269 @@
-# 🚗 RidePool — Pool your ride, Split the cost
+# 🚗 RidePool — Pool Your Ride, Split the Cost
 
-> A full-stack ride pooling web application where vehicle owners share rides and commuters split only the **fuel + toll cost** — no profit, no platform fee, just fair sharing.
+A full-stack ride-pooling web application where vehicle owners share rides and commuters split only the fuel and toll cost—no profit, no platform fee, just fair cost sharing.
 
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?style=flat&logo=springboot)
-![MySQL](https://img.shields.io/badge/MySQL-8.0-blue?style=flat&logo=mysql)
-![Firebase](https://img.shields.io/badge/Firebase-Auth-orange?style=flat&logo=firebase)
-![WebSocket](https://img.shields.io/badge/WebSocket-STOMP-yellow?style=flat)
-![Vite](https://img.shields.io/badge/Frontend-Vite-purple?style=flat&logo=vite)
+**Tech Stack:** Spring Boot • React • TypeScript • MySQL • JWT • WebSocket • Google Maps API • Vite
 
 ---
 
-## 📌 About
+# 📌 About
 
-RidePool is inspired by BlaBlaCar but built for **Indian students and daily commuters** in semi-urban and rural areas. Unlike BlaBlaCar, RidePool charges **zero platform commission** — riders only recover their fuel and toll costs, making it genuinely affordable for everyone.
+RidePool is inspired by BlaBlaCar but designed for Indian students and daily commuters in semi-urban and rural areas. Unlike commercial ride-sharing platforms, RidePool charges **zero platform commission**. Riders recover only their fuel and toll expenses, making travel more affordable, sustainable, and community-driven.
 
 ---
 
-## ✨ Features
+# ✨ Features
 
-### 👤 User Management
-- Register / Login with Firebase Authentication
-- Role-based access — **Rider** (offers ride) & **Commuter** (books ride)
-- Profile with photo, vehicle details, license, and rating score
-- ID / License verification badge
-- Trusted contact for trip sharing
+## 👤 User Management
 
-### 🚗 Ride Posting
-- Post rides with source, destination, date, time, and available seats
-- Support for bikes and cars
-- Mark toll routes, women-only rides
-- Recurring rides — daily / weekly (auto-created by scheduler at 1 AM)
-- Edit or cancel posted rides
+* Register/Login using Email & Password
+* **Mandatory Email OTP verification** during registration
+* JWT-based Authentication
+* Role-based access (Rider & Commuter)
+* User profile with photo, vehicle details, driving license, and ratings
+* ID/License verification badge
+* Trusted emergency contact
 
-### 🔍 Ride Search
-- Search by source, destination, date, and seats
-- Filter by vehicle type, min rating, women-only
-- Fare preview before booking
-- View rider profile and verification status
+---
 
-### 📋 Booking System
-- Booking lifecycle → `PENDING → CONFIRMED → COMPLETED`
-- OTP-based trip start confirmation (valid 30 minutes)
-- Auto-cancel pending bookings after 15 minutes (Spring scheduled job)
-- Real-time seat availability update
+## 🚗 Ride Posting
 
-### 💰 Smart Fare Splitting
+* Post rides with source, destination, date, time, and available seats
+* Bike and Car ride support
+* Women-only rides
+* Toll route support
+* Recurring rides (Daily/Weekly)
+* Scheduler automatically creates recurring rides at **1:00 AM**
+* Edit or cancel rides
+
+---
+
+## 🔍 Ride Search
+
+* Search rides by source, destination, date, and seats
+* Filter by:
+
+  * Vehicle type
+  * Minimum rider rating
+  * Women-only rides
+* Fare preview before booking
+* View rider profile and verification status
+
+---
+
+## 📋 Booking System
+
+* Booking lifecycle:
+
+  * PENDING
+  * CONFIRMED
+  * COMPLETED
+* Email OTP verification before trip starts
+* OTP valid for 30 minutes
+* Auto-cancel pending bookings after 15 minutes using Spring Scheduler
+* Real-time seat availability updates
+
+---
+
+## 💰 Smart Fare Splitting
+
+Fare Per Seat =
+
 ```
-Fare Per Seat = (Distance × Fuel Rate per KM + Toll Cost) ÷ Total Seats
+(Distance × Fuel Rate per KM + Toll Cost)
+------------------------------------------
+           Total Available Seats
 ```
-- Distance auto-calculated via Google Maps API
-- Fuel rate configurable by Admin from database
-- Fare preview before booking
-- Shareable receipt after trip completion
 
-### 📍 Live Location & Tracking
-- Real-time rider GPS broadcast via WebSocket
-- Commuter tracks rider approaching pickup
-- Trip start/end location logging
-
-### 💬 In-App Chat
-- WebSocket STOMP based real-time chat per ride
-- Firebase chat fallback support
-- Chat auto-disabled on trip completion
-
-### 🛡️ Safety Features
-- OTP trip confirmation
-- SOS emergency alert with live location
-- Women-only ride filter
-- Profile verification badges
-- Trip sharing with trusted contact
-
-### 🌱 Eco & Community Impact
-- CO₂ savings auto-calculated on trip completion (`0.2 kg per seat`)
-- Fuel saved tracker per user
-- Karma points for frequent ride-givers
-- Community leaderboard (top riders by karma + CO₂)
-
-### 📊 Dashboard & History
-- Rider dashboard — posted rides, cost offset, ratings
-- Commuter dashboard — booked rides, money saved, CO₂ saved
-- Trip history with fare breakdown
-- Weekly / monthly ride stats
-
-### 🔧 Admin Panel
-- Manage users — verify / block
-- Monitor reports and flags
-- Platform analytics — user growth, ride volume, total CO₂ saved
-- Live fuel rate configuration stored in database
+* Distance calculated using Google Maps API
+* Fuel rate configurable by Admin
+* Fare preview before booking
+* Downloadable trip receipt
 
 ---
 
-## 🛠️ Tech Stack
+## 📍 Live Location Tracking
 
-| Layer | Technology |
-|---|---|
-| Frontend | HTML + CSS + JavaScript (Vite) |
-| Backend | Java (Spring Boot 3.2) |
-| Database | MySQL 8.0 |
-| Authentication | Firebase Auth + JWT |
-| Maps & Routes | Google Maps API |
-| Live Location | WebSocket (STOMP) |
-| Real-time Chat | WebSocket + Firebase |
-| Notifications | Firebase Cloud Messaging (FCM) |
-| Scheduled Jobs | Spring @Scheduled |
-| Load Testing | Apache JMeter |
+* Rider GPS broadcast using WebSocket (STOMP)
+* Live tracking for commuters
+* Trip start/end location logging
 
 ---
 
-## 🗄️ Database Schema
+## 💬 Real-Time Chat
 
-| Table | Purpose |
-|---|---|
-| `users` | All registered users with roles |
-| `rides` | Posted rides with recurrence info |
-| `bookings` | Seat reservations with OTP & lifecycle |
-| `fare_details` | Cost breakdown per trip |
-| `reviews` | Ratings and written reviews |
-| `reports` | User complaints and flags |
-| `eco_tracker` | CO₂ and fuel savings per user |
-| `karma_points` | Reward points for ride-givers |
-| `platform_config` | Admin-controlled fuel rate and toll config |
+* WebSocket (STOMP)-based ride chat
+* One chat room per ride
+* Chat disabled automatically after ride completion
 
 ---
 
-## 🔌 API Overview
+## 🛡️ Safety Features
 
-40+ REST APIs across 13 modules:
-
-| Module | Key Endpoints |
-|---|---|
-| Auth | `POST /api/auth/firebase-login` |
-| Users | `GET /api/users/{id}`, `PUT /api/users/me` |
-| Rides | `POST /api/rides`, `GET /api/rides/search`, `PATCH /api/rides/{id}/cancel` |
-| Bookings | `POST /api/bookings`, `PATCH /api/bookings/{id}/confirm`, `POST /api/bookings/{id}/verify-otp` |
-| Fare | `POST /api/fare/preview`, `GET /api/bookings/{id}/receipt` |
-| Reviews | `POST /api/reviews`, `GET /api/reviews/user/{userId}` |
-| Reports | `POST /api/reports`, `GET /api/reports/my` |
-| Stats | `GET /api/stats/dashboard`, `GET /api/stats/leaderboard` |
-| Admin | `GET /api/admin/users`, `PATCH /api/admin/users/{id}/verify`, `PUT /api/admin/config/fuel-rate` |
+* Email OTP verification
+* SOS emergency alert
+* Women-only rides
+* Verified rider badges
+* Trip sharing with trusted contacts
 
 ---
 
-## 🚀 Getting Started
+## 🌱 Eco & Community Impact
 
-### Prerequisites
-- Java 17+
-- MySQL 8.0+
-- Node.js 18+
-- Firebase project
+* Automatic CO₂ savings calculation
+* Fuel savings tracker
+* Karma points for frequent ride providers
+* Community leaderboard
 
-### Backend Setup
+---
+
+## 📊 Dashboard & History
+
+### Rider Dashboard
+
+* Posted rides
+* Cost recovered
+* Ratings received
+* Monthly ride statistics
+
+### Commuter Dashboard
+
+* Booked rides
+* Money saved
+* CO₂ saved
+* Ride history
+
+---
+
+## 🔧 Admin Panel
+
+* Verify or block users
+* Manage reports
+* Platform analytics
+* Configure live fuel rate
+* Monitor overall ride statistics
+
+---
+
+# 🛠️ Tech Stack
+
+| Layer          | Technology                               |
+| -------------- | ---------------------------------------- |
+| Frontend       | React + TypeScript + Vite + Tailwind CSS |
+| Backend        | Java 17 + Spring Boot 3                  |
+| Database       | MySQL 8                                  |
+| Authentication | JWT + Spring Security                    |
+| Maps           | Google Maps API                          |
+| Live Location  | WebSocket (STOMP)                        |
+| Chat           | WebSocket (STOMP)                        |
+| Email Service  | Spring Mail (OTP Verification)           |
+| Scheduled Jobs | Spring Scheduler                         |
+| Load Testing   | Apache JMeter                            |
+
+---
+
+# 🗄️ Database Schema
+
+| Table           | Purpose                       |
+| --------------- | ----------------------------- |
+| users           | User accounts and roles       |
+| rides           | Ride information              |
+| bookings        | Ride bookings with OTP status |
+| fare_details    | Fare calculation and receipt  |
+| reviews         | User ratings and reviews      |
+| reports         | User complaints               |
+| eco_tracker     | CO₂ and fuel savings          |
+| karma_points    | Reward points                 |
+| platform_config | Fuel rate configuration       |
+
+---
+
+# 🔌 API Overview
+
+More than **40 REST APIs** across multiple modules.
+
+| Module         | Key Endpoints                                                                             |
+| -------------- | ----------------------------------------------------------------------------------------- |
+| Authentication | POST /api/auth/register, POST /api/auth/login, POST /api/auth/verify-email-otp            |
+| Users          | GET /api/users/{id}, PUT /api/users/me                                                    |
+| Rides          | POST /api/rides, GET /api/rides/search, PATCH /api/rides/{id}/cancel                      |
+| Bookings       | POST /api/bookings, PATCH /api/bookings/{id}/confirm, POST /api/bookings/{id}/verify-otp  |
+| Fare           | POST /api/fare/preview, GET /api/bookings/{id}/receipt                                    |
+| Reviews        | POST /api/reviews, GET /api/reviews/user/{userId}                                         |
+| Reports        | POST /api/reports, GET /api/reports/my                                                    |
+| Statistics     | GET /api/stats/dashboard, GET /api/stats/leaderboard                                      |
+| Admin          | GET /api/admin/users, PATCH /api/admin/users/{id}/verify, PUT /api/admin/config/fuel-rate |
+
+---
+
+# 🚀 Getting Started
+
+## Prerequisites
+
+* Java 17+
+* MySQL 8+
+* Node.js 18+
+* Google Maps API Key
+
+---
+
+## Backend Setup
+
 ```bash
-# Clone the repository
 git clone https://github.com/yourusername/ridepool.git
 
-# Navigate to backend
 cd backend
 
-# Configure database in application.properties
+# Configure application.properties
+
 spring.datasource.url=jdbc:mysql://localhost:3306/ridepool
 spring.datasource.username=your_username
 spring.datasource.password=your_password
 
-# Run the backend
-.\mvnw.cmd spring-boot:run
+./mvnw spring-boot:run
 ```
 
-### Frontend Setup
+---
+
+## Frontend Setup
+
 ```bash
-# Navigate to frontend
 cd frontend
 
-# Install dependencies
 npm install
 
-# Run the frontend
 npm run dev
 ```
 
-Open → `http://localhost:5173`
+Open:
+
+```
+http://localhost:5173
+```
 
 ---
 
-## 📊 Project Stats
+# 📊 Project Stats
 
-| | |
-|---|---|
-| 🧩 Total Modules | 13 |
-| 🔌 REST API Endpoints | 40+ |
-| 🗄️ Database Tables | 9 |
-| 🛠️ Technologies | 10+ |
-| 👥 Concurrent Users Tested | 50+ |
-| 📈 SQL Query Optimization | 20–25% performance gain |
-
----
-
-## 👨‍💻 Author
-
-**Sathwik** — 3rd Year B.Tech Student  
-[GitHub](https://github.com/sathwik466)
+| Metric                  | Value                          |
+| ----------------------- | ------------------------------ |
+| Modules                 | 13                             |
+| REST APIs               | 40+                            |
+| Database Tables         | 9                              |
+| Technologies Used       | 10+                            |
+| Concurrent Users Tested | 50+                            |
+| SQL Query Optimization  | 20–25% Performance Improvement |
 
 ---
 
-## 📄 License
+# 👨‍💻 Author
 
-This project is for educational purposes.
+**Sathwik Thuppathuri**
+
+B.Tech (3rd Year) – CVR College of Engineering
+
+---
+
+# 📄 License
+
+This project is developed for educational and learning purposes.
