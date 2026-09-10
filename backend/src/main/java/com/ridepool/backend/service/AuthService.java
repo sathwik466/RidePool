@@ -105,6 +105,34 @@ public class AuthService {
         phoneOtpRepository.save(otp);
     }
 
+    @Transactional
+    public void forgotPassword(String email) {
+        userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("No account found with this email"));
+
+        String code = otpService.generateCode();
+        emailOtpRepository.save(EmailOtp.builder()
+                .email(email)
+                .code(code)
+                .expiresAt(otpService.expiry())
+                .build());
+        emailService.sendOtp(email, code);
+    }
+
+    @Transactional
+    public void resetPassword(String email, String code, String newPassword) {
+        EmailOtp otp = emailOtpRepository.findTopByEmailAndUsedFalseOrderByExpiresAtDesc(email)
+                .orElseThrow(() -> new AppException("No OTP found for this email"));
+        otpService.validateEmailOtp(otp, code);
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new AppException("User not found"));
+        user.setPasswordHash(passwordEncoder.encode(newPassword));
+        otp.setUsed(true);
+        userRepository.save(user);
+        emailOtpRepository.save(otp);
+    }
+
     public AuthResponse login(LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new AppException("Invalid credentials"));

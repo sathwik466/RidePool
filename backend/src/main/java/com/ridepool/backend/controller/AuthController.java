@@ -47,4 +47,16 @@ public class AuthController {
     public AuthResponse login(@Valid @RequestBody LoginRequest request) {
         return authService.login(request);
     }
+
+    @PostMapping("/forgot-password")
+    public ApiResponse<String> forgotPassword(@RequestBody OtpRequest request) {
+        authService.forgotPassword(request.getEmail());
+        return ApiResponse.ok("Password reset OTP sent to your email");
+    }
+
+    @PostMapping("/reset-password")
+    public ApiResponse<String> resetPassword(@RequestBody ResetPasswordRequest request) {
+        authService.resetPassword(request.getEmail(), request.getCode(), request.getNewPassword());
+        return ApiResponse.ok("Password reset successfully");
+    }
 }
