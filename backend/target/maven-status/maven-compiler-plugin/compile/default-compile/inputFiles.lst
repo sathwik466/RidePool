@@ -3,7 +3,7 @@ C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\controller\Booki
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\model\Ride.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\dto\AuthResponse.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\scheduler\BookingExpiryJob.java
-C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\service\CloudinaryService.java
+C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\service\FileStorageService.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\model\Review.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\dto\OtpRequest.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\repository\TripLocationRepository.java
@@ -59,6 +59,7 @@ C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\model\EmailOtp.j
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\security\SecurityConfig.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\service\RideService.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\repository\PhoneOtpRepository.java
+C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\config\WebMvcConfig.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\dto\ChatMessageDto.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\service\BookingService.java
 C:\projects\RidePool\backend\src\main\java\com\ridepool\backend\service\SmsService.java

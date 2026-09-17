@@ -18,7 +18,7 @@ import java.io.IOException;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final CloudinaryService cloudinaryService;
+    private final FileStorageService fileStorageService;
 
     public User getByEmail(String email) {
         return userRepository.findByEmail(email)
@@ -79,7 +79,7 @@ public class UserService {
     @Transactional
     public String uploadPhoto(String email, MultipartFile file) throws IOException {
         User user = getByEmail(email);
-        String url = cloudinaryService.upload(file, "photos");
+        String url = fileStorageService.upload(file, "photos");
         user.setPhotoUrl(url);
         userRepository.save(user);
         return url;
@@ -91,7 +91,7 @@ public class UserService {
         if (user.getRole() != Role.RIDER) {
             throw new AppException("Only riders can upload documents");
         }
-        String url = cloudinaryService.upload(file, "documents");
+        String url = fileStorageService.upload(file, "documents");
         user.setDocumentUrl(url);
         user.setVerificationStatus(com.ridepool.backend.model.VerificationStatus.PENDING);
         userRepository.save(user);

@@ -50,6 +50,7 @@ com\ridepool\backend\dto\RideResponse.class
 com\ridepool\backend\service\UserService.class
 com\ridepool\backend\dto\BookingResponse.class
 com\ridepool\backend\repository\SosAlertRepository.class
+com\ridepool\backend\dto\ResetPasswordRequest.class
 com\ridepool\backend\controller\StatsController.class
 com\ridepool\backend\repository\TripLocationRepository.class
 com\ridepool\backend\security\JwtService.class
@@ -75,6 +76,7 @@ com\ridepool\backend\dto\FarePreviewResponse$FarePreviewResponseBuilder.class
 com\ridepool\backend\controller\AuthController.class
 com\ridepool\backend\service\RideService.class
 com\ridepool\backend\dto\AuthResponse.class
+com\ridepool\backend\config\WebMvcConfig.class
 com\ridepool\backend\model\ChatMessage$ChatMessageBuilder.class
 com\ridepool\backend\dto\SosRequest.class
 com\ridepool\backend\controller\RideController.class
@@ -88,6 +90,7 @@ com\ridepool\backend\controller\ChatRestController.class
 com\ridepool\backend\service\ReviewService.class
 com\ridepool\backend\service\SosService.class
 com\ridepool\backend\service\BookingService.class
+com\ridepool\backend\service\FileStorageService.class
 com\ridepool\backend\repository\ReviewRepository.class
 com\ridepool\backend\dto\RegisterRequest.class
 com\ridepool\backend\model\Booking.class
@@ -103,7 +106,6 @@ com\ridepool\backend\config\CorsConfig.class
 com\ridepool\backend\controller\FareController.class
 com\ridepool\backend\exception\AppException.class
 com\ridepool\backend\model\VerificationStatus.class
-com\ridepool\backend\service\CloudinaryService.class
 com\ridepool\backend\dto\BookingRequest.class
 com\ridepool\backend\model\EcoTracker$EcoTrackerBuilder.class
 com\ridepool\backend\model\BookingStatus.class
