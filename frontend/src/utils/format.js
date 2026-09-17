@@ -61,6 +61,82 @@ export async function geocodeSearch(query) {
   }));
 }
 
+export async function reverseGeocode(lat, lng) {
+  try {
+    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
+    const res = await fetch(url, {
+      headers: { 'Accept-Language': 'en' },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.display_name) {
+        const addr = data.address;
+        if (addr) {
+          const parts = [
+            addr.road || addr.suburb || addr.neighbourhood,
+            addr.city || addr.town || addr.county,
+            addr.state,
+          ].filter(Boolean);
+          if (parts.length > 0) {
+            return parts.join(', ');
+          }
+        }
+        return data.display_name;
+      }
+    }
+  } catch (err) {
+    console.error('Reverse geocoding error:', err);
+  }
+  return `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
+}
+
+export function haversineDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
+export async function fetchRouteEta(srcLat, srcLng, destLat, destLng) {
+  try {
+    const url = `https://router.project-osrm.org/route/v1/driving/${srcLng},${srcLat};${destLng},${destLat}?overview=false`;
+    const res = await fetch(url);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.routes && data.routes.length > 0) {
+        const route = data.routes[0];
+        const distanceKm = Number((route.distance / 1000).toFixed(1));
+        const durationMin = Math.max(1, Math.round(route.duration / 60));
+        return { distanceKm, durationMin };
+      }
+    }
+  } catch (err) {
+    console.warn('OSRM routing fetch failed, falling back to haversine:', err);
+  }
+
+  // Fallback: Haversine with 1.3 road detour factor and 35 km/h average traffic speed
+  const straightKm = haversineDistanceKm(srcLat, srcLng, destLat, destLng);
+  const roadKm = Number((straightKm * 1.3).toFixed(1));
+  const estMin = Math.max(1, Math.round((roadKm / 35) * 60));
+  return { distanceKm: roadKm, durationMin: estMin };
+}
+
+export function formatEtaTime(durationMin) {
+  const arrivalDate = new Date(Date.now() + durationMin * 60000);
+  return arrivalDate.toLocaleTimeString('en-IN', {
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'Asia/Kolkata',
+  });
+}
+
 export function statusColor(status) {
   const map = {
     PENDING: 'bg-amber-100 text-amber-800',
